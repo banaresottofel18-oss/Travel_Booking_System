@@ -52,6 +52,11 @@ public class loginGUI extends JFrame implements ActionListener {
         btnlogin.setBounds(240, 220, 70, 20);
         add(btnlogin);
         
+        btnlogin.addActionListener (e-> {
+        new dashboardGUI().setVisible(true); 
+        dispose();
+        });
+        
         
         
         btnclear = new JButton("Clear");
