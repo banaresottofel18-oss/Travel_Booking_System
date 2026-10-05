@@ -38,11 +38,17 @@ public class dashboardGUI extends JFrame implements ActionListener {
         btnbh.setBounds(250, 150, 130, 30);
         add(btnbh);
        
+        btnf.addActionListener(this);
         
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       if (e.getSource() == btnf) {
+        flightsGUI flight = new flightsGUI();
+        flight.setVisible(true);
+        dispose();
+
     }
     
+}
 }
