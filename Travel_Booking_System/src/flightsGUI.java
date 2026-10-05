@@ -24,48 +24,48 @@ public class flightsGUI extends JFrame implements ActionListener{
         setSize(450, 450);
         
         flights = new JLabel("Flights");
-        flights.setBounds(100, 30, 100, 40);
+        flights.setBounds(175, 30, 100, 40);
         flights.setFont(flights.getFont().deriveFont(25.0f));
         add(flights);
     
         from = new JLabel("From:");
-        from.setBounds(30, 90, 50, 30);
+        from.setBounds(30, 100, 45, 25);
         add(from);
         
         to = new JLabel("To:");
-        to.setBounds(160, 90, 50, 30);
+        to.setBounds(165, 100, 30, 25);
         add(to);
         
         date = new JLabel("Date:");
-        date.setBounds(290, 90, 50, 30);
+        date.setBounds(285, 100, 40, 25);
         add(date);
         
         txtfrom = new JTextField();
-        txtfrom.setBounds(40, 90, 50, 30);
+        txtfrom.setBounds(75, 100, 80, 25);
         add(txtfrom);
         
         txtto = new JTextField();
-        txtto.setBounds(170, 90, 50, 30);
+        txtto.setBounds(195, 100, 80, 25);
         add(txtto);
         
         txtdate = new JTextField();
-        txtdate.setBounds(300, 90, 50, 30);
+        txtdate.setBounds(325, 100, 70, 25);
         add(txtdate);
         
-        btnsearch = new JButton();
-        btnsearch.setBounds(370, 90, 50, 30);
+        btnsearch = new JButton("Search");
+        btnsearch.setBounds(325, 135, 90, 25);
         add(btnsearch);
         
-        btnbook = new JButton();
-        btnbook.setBounds(370, 370, 50, 30);
+        btnbook = new JButton("Book");
+        btnbook.setBounds(325, 375, 70, 30);
         add(btnbook);
         
-        btnback = new JButton();
-        btnback.setBounds(20, 20, 50, 30);
+        btnback = new JButton("Back");
+        btnback.setBounds(20, 20, 70, 30);
         add(btnback);
         
         flightPanel = new JPanel();
-        flightPanel.setBounds(30, 120, 370, 280);
+        flightPanel.setBounds(30, 170, 365, 190);
         flightPanel.setBorder(BorderFactory.createTitledBorder("Available Flights"));
         add(flightPanel);
        
