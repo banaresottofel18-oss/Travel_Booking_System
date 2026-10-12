@@ -10,7 +10,7 @@ import javax.swing.BorderFactory;
 
 /**
  *
- * @author espin
+ * @author leyco
  */
 public class HotelGUI extends JFrame implements ActionListener{
 
@@ -133,7 +133,7 @@ hotelPanel.setBorder(BorderFactory.createTitledBorder("Available Hotels"));
     private void bookHotel() {
         String selected = hotelList.getSelectedValue();
         if (selected == null) {
-            JOptionPane.showMessageDialog(this, "Please search and select a hotel first!", "No Selection", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please search and select a hotel first!", "No Selection made", JOptionPane.WARNING_MESSAGE);
             return;
         }
         JOptionPane.showMessageDialog(this, "Hotel booked successfully!\n\n" + selected, "Booking Confirmed", JOptionPane.INFORMATION_MESSAGE);
