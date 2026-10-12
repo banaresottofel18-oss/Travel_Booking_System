@@ -81,4 +81,88 @@ public class HotelGUI extends JFrame implements ActionListener{
 
         hotelPanel = new JPanel();
         hotelPanel.setBounds(30, 170, 365, 190);
+
+hotelPanel.setBorder(BorderFactory.createTitledBorder("Available Hotels"));
+        hotelPanel.setLayout(null);
+        
+        hotelListModel = new DefaultListModel<>();
+        hotelList = new JList<>(hotelListModel);
+        JScrollPane scrollPane = new JScrollPane(hotelList);
+        scrollPane.setBounds(10, 20, 345, 160);
+        hotelPanel.add(scrollPane);
+        
+        add(hotelPanel);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnSearch) {
+            searchHotels();
+        }
+        else if (e.getSource() == btnBook) {
+            bookHotel();
+        }
+        else if (e.getSource() == btnBack) {
+            dispose();
+        }
+    }
+    
+    private void searchHotels() {
+        String id = txtHotelId.getText().trim();
+        String hotelName = txtName.getText().trim();
+        String loc = txtLocation.getText().trim();
+        String rateText = txtRating.getText().trim();
+        
+        hotelListModel.clear();
+        
+        if (id.isEmpty() && hotelName.isEmpty() && loc.isEmpty() && rateText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter at least one search field!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        StringBuilder result = new StringBuilder();
+        if (!id.isEmpty()) result.append("ID: ").append(id).append(" ");
+        if (!hotelName.isEmpty()) result.append("Name: ").append(hotelName).append(" ");
+        if (!loc.isEmpty()) result.append("Location: ").append(loc).append(" ");
+        if (!rateText.isEmpty()) result.append("Rating: ").append(rateText);
+        
+        hotelListModel.addElement(result.toString());
+        JOptionPane.showMessageDialog(this, "Search completed!", "Search", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void bookHotel() {
+        String selected = hotelList.getSelectedValue();
+        if (selected == null) {
+            JOptionPane.showMessageDialog(this, "Please search and select a hotel first!", "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(this, "Hotel booked successfully!\n\n" + selected, "Booking Confirmed", JOptionPane.INFORMATION_MESSAGE);
+        hotelListModel.clear();
+        txtHotelId.setText("");
+        txtName.setText("");
+        txtLocation.setText("");
+        txtRating.setText("");
+    }
+    
+    // Hotel Class
+    public class Hotel {
+        private String hotelId;
+        private String name;
+        private String location;
+        private double rating;
+
+        public Hotel(String hotelId, String name, String location, double rating) {
+            this.hotelId = hotelId;
+            this.name = name;
+            this.location = location;
+            this.rating = rating;
+        }
+
+        public String getHotelId() { return hotelId; }
+        public String getName() { return name; }
+        public String getLocation() { return location; }
+        public double getRating() { return rating; }
+    }
+}
+
         
