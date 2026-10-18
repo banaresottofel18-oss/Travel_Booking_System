@@ -21,51 +21,51 @@ public class flightsGUI extends JFrame implements ActionListener{
         setTitle ("Travel Booking System");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(450, 450);
+        setSize(1000, 1000);
         
         flights = new JLabel("Flights");
-        flights.setBounds(175, 30, 100, 40);
+        flights.setBounds(430, 40, 150, 50);
         flights.setFont(flights.getFont().deriveFont(25.0f));
         add(flights);
     
         from = new JLabel("From:");
-        from.setBounds(30, 100, 45, 25);
+        from.setBounds(100, 150, 50, 30);
         add(from);
         
         to = new JLabel("To:");
-        to.setBounds(165, 100, 30, 25);
+        to.setBounds(350, 150, 40, 30);
         add(to);
         
         date = new JLabel("Date:");
-        date.setBounds(285, 100, 40, 25);
+        date.setBounds(590, 150, 50, 30);
         add(date);
         
         txtfrom = new JTextField();
-        txtfrom.setBounds(75, 100, 80, 25);
+        txtfrom.setBounds(155, 150, 150, 30);
         add(txtfrom);
         
         txtto = new JTextField();
-        txtto.setBounds(195, 100, 80, 25);
+        txtto.setBounds(395, 150, 150, 30);
         add(txtto);
         
         txtdate = new JTextField();
-        txtdate.setBounds(325, 100, 70, 25);
+        txtdate.setBounds(640, 150, 150, 30);
         add(txtdate);
         
         btnsearch = new JButton("Search");
-        btnsearch.setBounds(325, 135, 90, 25);
+        btnsearch.setBounds(810, 150, 100, 30);
         add(btnsearch);
         
         btnbook = new JButton("Book");
-        btnbook.setBounds(325, 375, 70, 30);
+        btnbook.setBounds(800, 850, 110, 40);
         add(btnbook);
         
         btnback = new JButton("Back");
-        btnback.setBounds(20, 20, 70, 30);
+        btnback.setBounds(40, 40, 90, 35);
         add(btnback);
         
         flightPanel = new JPanel();
-        flightPanel.setBounds(30, 170, 365, 190);
+        flightPanel.setBounds(100, 220, 810, 600);
         flightPanel.setBorder(BorderFactory.createTitledBorder("Available Flights"));
         add(flightPanel);
        
