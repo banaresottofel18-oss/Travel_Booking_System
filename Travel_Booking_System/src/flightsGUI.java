@@ -70,7 +70,9 @@ public class flightsGUI extends JFrame implements ActionListener{
         add(flightPanel);
        
                 
-  
+        btnsearch.addActionListener(this);
+        btnbook.addActionListener(this);
+        btnback.addActionListener(this);
     
     }
 
