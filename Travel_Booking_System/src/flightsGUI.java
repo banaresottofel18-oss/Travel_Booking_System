@@ -78,5 +78,10 @@ public class flightsGUI extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        if(e.getSource() == btnback){
+            new dashboardGUI().setVisible(true);
+            dispose();
+        }
     }
 }
