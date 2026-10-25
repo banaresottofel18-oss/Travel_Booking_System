@@ -42,6 +42,23 @@ public class bookinghistoryGUI extends JFrame {
         packages.setFont(packages.getFont().deriveFont(18.0f));
         add(packages);
         
-    }
-    
+        flightPanel = new JPanel();
+        flightPanel.setLayout(null);
+        flightPanel.setBounds(50, 165, 270, 500);
+        flightPanel.setBorder(BorderFactory.createTitledBorder("Flight Bookings"));
+        add(flightPanel);
+        
+        hotelPanel = new JPanel();
+        hotelPanel.setLayout(null);
+        hotelPanel.setBounds(330, 165, 270, 500);
+        hotelPanel.setBorder(BorderFactory.createTitledBorder("Hotel Bookings"));
+        add(hotelPanel);
+        
+        packagePanel = new JPanel();
+        packagePanel.setLayout(null);
+        packagePanel.setBounds(610, 165, 270, 500);
+        packagePanel.setBorder(BorderFactory.createTitledBorder("Package Bookings"));
+        add(packagePanel);
+                
 }
+    
