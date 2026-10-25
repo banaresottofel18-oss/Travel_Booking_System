@@ -20,35 +20,34 @@ public class dashboardGUI extends JFrame implements ActionListener {
         setTitle("Travel Booking System");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize (450,450);
+        setSize (1000,1000);
 
         btnf = new JButton("Book flights");
-        btnf.setBounds(80, 100, 120, 30);
+        btnf.setBounds(280, 350, 190, 50);
         add(btnf);
         
         btnh = new JButton("Book hotel");
-        btnh.setBounds(250, 100, 130, 30);
+        btnh.setBounds(530, 350, 190, 50);
         add(btnh);
         
          btnp = new JButton("Book Package");
-        btnp.setBounds(80, 150, 120, 30);
+        btnp.setBounds(280, 430, 190, 50);
         add(btnp);
         
         btnbh = new JButton("Booking History");
-        btnbh.setBounds(250, 150, 130, 30);
+        btnbh.setBounds(530, 430, 190, 50);
         add(btnbh);
        
         btnf.addActionListener(this);
         
     }
     @Override
-    public void actionPerformed(ActionEvent e) {
-       if (e.getSource() == btnf) {
+public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == btnf) {
         flightsGUI flight = new flightsGUI();
         flight.setVisible(true);
         dispose();
-
     }
-    
+
 }
 }
