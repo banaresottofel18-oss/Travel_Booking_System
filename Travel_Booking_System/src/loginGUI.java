@@ -67,6 +67,7 @@ public class loginGUI extends JFrame implements ActionListener {
         
         btnclear = new JButton("Clear");
         btnclear.setBounds(160, 220, 70, 20);
+        btnclear.addActionListener(this);
         add(btnclear);
         
         
@@ -78,6 +79,13 @@ public class loginGUI extends JFrame implements ActionListener {
       
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        if (e.getSource() == btnclear) {
+                txtuser.setText("");
+                txtpass.setText("");
+                txtuser.requestFocus();
+                return;
+}
          if (e.getSource() == btnlogin) {
 
             if (conn == null) {
@@ -103,12 +111,17 @@ public class loginGUI extends JFrame implements ActionListener {
 
             rs = pst.executeQuery();
               
-              if (rs.next()){
-                JOptionPane.showMessageDialog(this,"Login Succesfull"); 
-          }    else  {
-                        JOptionPane.showMessageDialog(
-                            this, "Invalid username or password.");
-              } 
+              if (rs.next()) {
+                JOptionPane.showMessageDialog(this, "Login Successful!");
+                // Open Dashboard
+                dashboardGUI dashboard = new dashboardGUI();
+                dashboard.setVisible(true);
+                // Close Login Frame
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(
+                    this, "Incorrect username or password");
+            }
      }catch (SQLException ex) {
        
         }
