@@ -97,5 +97,40 @@ public class bookinghistoryGUI extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-    }
     
+            if (e.getSource() == btnback) {
+            new dashboardGUI().setVisible(true);
+            dispose();
+        }
+
+        if (e.getSource() == btnview) {
+
+            String details = "";
+
+            if (flightList.getSelectedValue() != null) {
+                details = "Flight: "
+                    + flightList.getSelectedValue();
+            } else if (hotelList.getSelectedValue() != null) {
+                details = "Hotel: "
+                    + hotelList.getSelectedValue();
+            } else if (packageList.getSelectedValue() != null) {
+                details = "Package: "
+                    + packageList.getSelectedValue();
+            }
+
+            if (details.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Please select a booking first."
+                );
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    details,
+                    "Booking Details",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+        }
+    }
+}
