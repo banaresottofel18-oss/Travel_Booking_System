@@ -59,6 +59,16 @@ public class bookinghistoryGUI extends JFrame {
         packagePanel.setBounds(610, 165, 270, 500);
         packagePanel.setBorder(BorderFactory.createTitledBorder("Package Bookings"));
         add(packagePanel);
+        
+        btnback = new JButton("Back");
+        btnback.setBounds(50, 40, 90, 35);
+        add(btnback);
+        
+        btnview = new JButton("View");
+        btnview.setBounds(700, 720, 150, 40);
+        add(btnview);
+        
+        
                 
 }
     
