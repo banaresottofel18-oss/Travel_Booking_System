@@ -3,7 +3,7 @@ import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.*;
 
-public class bookinghistoryGUI extends JFrame {
+public class bookinghistoryGUI extends JFrame implements ActionListener {
  
     private JLabel history, flights, hotels, packages;
     private JPanel flightPanel, hotelPanel, packagePanel;
@@ -68,7 +68,34 @@ public class bookinghistoryGUI extends JFrame {
         btnview.setBounds(700, 720, 150, 40);
         add(btnview);
         
+        flightModel = new DefaultListModel<>();
+        flightList = new JList<>(flightModel);
         
+        JScrollPane flightScroll = new JScrollPane(flightList);
+        flightScroll.setBounds(10, 25, 250, 460);
+        flightPanel.add(flightScroll);
+        
+        
+        hotelModel = new DefaultListModel<>();
+        hotelList = new JList<>(hotelModel);
+       
+        JScrollPane hotelScroll = new JScrollPane(hotelList);
+        hotelScroll.setBounds(10, 25, 250, 460);
+        hotelPanel.add(hotelScroll);
+        
+        packageModel = new DefaultListModel<>();
+        packageList = new JList<>(packageModel);
+        
+        JScrollPane packageScroll = new JScrollPane(packageList);
+        packageScroll.setBounds(10, 25, 250, 460);
+        packagePanel.add(packageScroll);
+        
+        btnback.addActionListener(this);
+        btnview.addActionListener(this);
                 
 }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+    }
     
