@@ -39,7 +39,9 @@ public class dashboardGUI extends JFrame implements ActionListener {
         add(btnbh);
        
         btnf.addActionListener(this);
+        btnh.addActionListener(this);
         btnbh.addActionListener(this);
+        
         
     }
     @Override
@@ -47,6 +49,12 @@ public void actionPerformed(ActionEvent e) {
     if (e.getSource() == btnf) {
         flightsGUI flight = new flightsGUI();
         flight.setVisible(true);
+        dispose();
+    }
+    
+    if (e.getSource() == btnh){
+        hotelGUI hotel = new hotelGUI();
+        hotel.setVisible(true);
         dispose();
     }
      if (e.getSource() == btnbh) {
