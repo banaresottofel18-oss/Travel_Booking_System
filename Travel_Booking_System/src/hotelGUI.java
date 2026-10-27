@@ -12,7 +12,7 @@ import javax.swing.BorderFactory;
  *
  * @author leyco
  */
-public class HotelGUI extends JFrame implements ActionListener{
+public class hotelGUI extends JFrame implements ActionListener{
 
     private JLabel hotels, hotelId, name, location, rating;
     private JTextField txtHotelId, txtName, txtLocation, txtRating;
@@ -21,7 +21,7 @@ public class HotelGUI extends JFrame implements ActionListener{
     private DefaultListModel<String> hotelListModel;
     private JList<String> hotelList;
 
-    public HotelGUI(){
+    public hotelGUI(){
         setTitle ("Travel Booking System");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,6 +103,7 @@ hotelPanel.setBorder(BorderFactory.createTitledBorder("Available Hotels"));
             bookHotel();
         }
         else if (e.getSource() == btnBack) {
+            new dashboardGUI().setVisible(true);
             dispose();
         }
     }
