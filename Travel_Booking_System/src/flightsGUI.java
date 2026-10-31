@@ -91,7 +91,7 @@ public class flightsGUI extends JFrame implements ActionListener{
     }
     private void loadFlights() {
       
-        Model.setRowCount(0); // clear old rows
+        Model.setRowCount(0); 
  
         String sql = "SELECT `FlightId`, `Departure`, `Arrival`, `Price`, `Date` "
                    + "FROM `flightsdb` WHERE `Departure` = ? AND `Arrival` = ? AND `Date` = ?";
