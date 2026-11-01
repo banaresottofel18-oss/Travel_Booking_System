@@ -1,7 +1,7 @@
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.awt.Font;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -15,6 +15,7 @@ import javax.swing.*;
 public class dashboardGUI extends JFrame implements ActionListener {
     
         private JButton btnf, btnh,btnp,btnbh;
+        private JLabel welcome, text1, text2, services, desc, footer;
         
     dashboardGUI(){
         setTitle("Travel Booking System");
@@ -41,6 +42,41 @@ public class dashboardGUI extends JFrame implements ActionListener {
         btnf.addActionListener(this);
         btnh.addActionListener(this);
         btnbh.addActionListener(this);
+        
+        welcome = new JLabel("Welcome!");
+        welcome.setBounds(300, 20, 400, 40);
+        welcome.setFont(new Font("Arial", Font.BOLD, 25));
+        welcome.setHorizontalAlignment(JLabel.CENTER);
+        add(welcome);
+        
+        text1 = new JLabel("Ready for Your Next Adventure?");
+        text1.setBounds(150, 70, 700, 45);
+        text1.setFont(new Font("Arial", Font.BOLD, 28));
+        text1.setHorizontalAlignment(JLabel.CENTER);
+        add(text1);
+        
+        text2 = new JLabel("Explore destinations, discover deals, and plan your perfect trip.");
+        text2.setBounds(250, 120, 500, 35);
+        text2.setFont(new Font("Arial", Font.PLAIN, 18));
+        text2.setHorizontalAlignment(JLabel.CENTER);
+        add(text2);
+        
+        services = new JLabel("Explore Our Services");
+        services.setBounds(100, 210, 400, 35);
+        services.setFont(new Font("Arial", Font.BOLD, 22));
+        add(services);
+        
+        desc = new JLabel("Choose a service below to start planning your trip.");
+        desc.setBounds(100, 250, 600, 30);
+        desc.setFont(new Font("Arial", Font.PLAIN, 16));
+        add(desc);
+        
+        footer = new JLabel("Travel with ease. Explore with confidence.");
+        footer.setBounds(200, 900, 600, 35);
+        footer.setFont(new Font("Arial", Font.PLAIN, 14));
+        footer.setHorizontalAlignment(JLabel.CENTER);
+        add(footer);
+        
         
         
     }
