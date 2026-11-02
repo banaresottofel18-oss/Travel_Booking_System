@@ -16,6 +16,7 @@ public class travel_booking_system {
         // TODO code application logic here
         loginGUI frame = new loginGUI();
           frame.setVisible(true);
+          // test
     }
     
 }
