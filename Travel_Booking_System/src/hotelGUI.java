@@ -27,88 +27,88 @@ public class hotelGUI extends JFrame implements ActionListener{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        setSize(1000, 1000);
 
         hotels = new JLabel("Hotels");
-        hotels.setBounds(170, 30, 100, 40);
+        hotels.setBounds(430, 30, 150, 40);
         hotels.setFont(hotels.getFont().deriveFont(25.0f));
         add(hotels);
 
-        hotelId = new JLabel("Hotel ID:");
-        hotelId.setBounds(30, 90, 65, 25);
+        hotelIdLabel = new JLabel("Hotel ID:");
+        hotelIdLabel.setBounds(80, 110, 65, 25);
         add(hotelIdLabel);
 
-        name = new JLabel("Name:");
-        name.setBounds(150, 90, 50, 25);
+        nameLabel = new JLabel("Name:");
+        nameLabel.setBounds(280, 110, 50, 25);
         add(nameLabel);
 
-        location = new JLabel("Location:");
-        location.setBounds(260, 90, 65, 25);
+        locationLabel = new JLabel("Location:");
+        locationLabel.setBounds(515, 110, 65, 25);
         add(locationLabel);
 
-        rating = new JLabel("Rating:");
-        rating.setBounds(370, 90, 50, 25);
+        ratingLabel = new JLabel("Rating:");
+        ratingLabel.setBounds(725, 110, 50, 25);
         add(ratingLabel);
 
         String[] hotelIds = {"", "HT001", "HT002", "HT003", "HT004", "HT005"};
         cmbHotelId = new JComboBox<>(hotelIds);
-        cmbHotelId.setBounds(95, 90, 50, 25);
+        cmbHotelId.setBounds(145, 110, 110, 25);
         add(cmbHotelId);
 
         String[] hotelNames = {"", "Grand Hotel", "City Inn", "Mountain View", "Beach Resort", "Sunset Lounge"};
         cmbName = new JComboBox<>(hotelNames);
-        cmbName.setBounds(205, 90, 50, 25);
+        cmbName.setBounds(330, 110, 160, 25);
         add(cmbName);
 
         String[] locations = {"", "Manila", "Cebu", "Davao", "Boracay", "Palawan"};
         cmbLocation = new JComboBox<>(locations);
-        cmbLocation.setBounds(325, 90, 40, 25);
+        cmbLocation.setBounds(580, 110, 120, 25);
         add(cmbLocation);
 
         String[] ratings = {"", "1.0", "1.6", "2.0", "2.3", "3.0", "3.7", "4.0", "4.2", "5.0"};
         cmbRating = new JComboBox<>(ratings);
-        cmbHitelId.setBounds(420, 90, 40, 25);
+        cmbHotelId.setBounds(775, 110, 90, 25);
         add(cmbRating);
 
         btnSearch = new JButton("Search");
-        btnSearch.setBounds(355, 125, 80, 25);
+        btnSearch.setBounds(430, 155, 100, 30);
         btnSearch.addActionListener(this);
         add(btnSearch);
 
         btnBack = new JButton("Back");
-        btnBack.setBounds(20, 20, 70, 30);
+        btnBack.setBounds(20, 20, 80, 30);
         btnBack.addActionListener(this);
         add(btnBack);
 
         hotelPanel = new JPanel();
-        hotelPanel.setBounds(30, 160, 390, 210);
+        hotelPanel.setBounds(80, 210, 820, 350);
 
 hotelPanel.setBorder(BorderFactory.createTitledBorder("Available Hotels"));
         hotelPanel.setLayout(null);
 
         JLabel lblHotelId = new JLabel("Hotel ID");
-        lblHotelId.setBounds(10, 5, 70, 20);
+        lblHotelId.setBounds(20, 25, 120, 25);
         hotelPanel.add(lblHotelId);
 
         JLabel lblName = new JLabel("Name");
-        lblName.setBounds(90, 5, 110, 20);
+        lblName.setBounds(170, 25, 200, 25);
         hotelPanel.add(lblName);
 
         JLabel lblLocation = new JLabel("Location");
-        lblLocation.setBounds(210, 5, 90, 20);
+        lblLocation.setBounds(430, 25, 150, 25);
         hotelPanel.add(lblLocation);
 
         JLabel lblRating = new JLabel("Rating");
-        lblRating.setBounds(10, 5, 70, 20);
+        lblRating.setBounds(650, 25, 100, 25);
         hotelPanel.add(lblRating);
         
         hotelListModel = new DefaultListModel<>();
         hotelList = new JList<>(hotelListModel);
         JScrollPane scrollPane = new JScrollPane(hotelList);
-        scrollPane.setBounds(10, 30, 370, 170);
+        scrollPane.setBounds(15, 55, 790, 280);
         hotelPanel.add(scrollPane);
         
         add(hotelPanel);
 
         btnBookHotel = new JButton("Book Hotel");
-        btnBookHotel.setBounds(30, 385, 130, 30);
+        btnBookHotel.setBounds(80, 580, 130, 35);
         btnBookHotel.addActionListener(this);
         add(btnBookHotel);
     }
@@ -118,7 +118,7 @@ hotelPanel.setBorder(BorderFactory.createTitledBorder("Available Hotels"));
         if (e.getSource() == btnSearch) {
             searchHotels();
         }
-        else if (e.getSource() == btnBookHotel) {           new HotelGUI().setVisible(true);
+        else if (e.getSource() == btnBookHotel) {new hotelGUI().setVisible(true);
             dispose();
         }
         else if (e.getSource() == btnBack) {
@@ -179,25 +179,6 @@ hotelPanel.setBorder(BorderFactory.createTitledBorder("Available Hotels"));
             JOptionPane.showMessageDialog(this, hotelListModel.size() + " hotel(s) found!", "Search Results", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    // Hotel Class
-    public class Hotel {
-        private String hotelId;
-        private String name;
-        private String location;
-        private double rating;
-
-        public Hotel(String hotelId, String name, String location, double rating) {
-            this.hotelId = hotelId;
-            this.name = name;
-            this.location = location;
-            this.rating = rating;
-        }
-
-        public String getHotelId() { return hotelId; }
-        public String getName() { return name; }
-        public String getLocation() { return location; }
-        public double getRating() { return rating; }
     }
 }
-
         
