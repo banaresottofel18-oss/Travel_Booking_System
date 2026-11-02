@@ -14,9 +14,9 @@ import javax.swing.BorderFactory;
  */
 public class hotelGUI extends JFrame implements ActionListener{
 
-    private JLabel hotels, hotelId, name, location, rating;
-    private JTextField txtHotelId, txtName, txtLocation, txtRating;
-    private JButton btnSearch, btnBook, btnBack;
+    private JLabel hotels, hotelIdLabel, nameLabel, locationLabel, ratingLabel;
+    private JComboBox<String> cmbHotelId, cmbName, cmbLocation, cmbRating;
+    private JButton btnSearch, btnBookHotel, btnBack;
     private JPanel hotelPanel;
     private DefaultListModel<String> hotelListModel;
     private JList<String> hotelList;
@@ -24,74 +24,93 @@ public class hotelGUI extends JFrame implements ActionListener{
     public hotelGUI(){
         setTitle ("Travel Booking System");
         setLayout(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(450, 450);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        setSize(1000, 1000);
 
         hotels = new JLabel("Hotels");
-        hotels.setBounds(170, 30, 100, 40);
+        hotels.setBounds(430, 30, 150, 40);
         hotels.setFont(hotels.getFont().deriveFont(25.0f));
         add(hotels);
 
-        hotelId = new JLabel("Hotel ID:");
-        hotelId.setBounds(30, 100, 70, 25);
-        add(hotelId);
+        hotelIdLabel = new JLabel("Hotel ID:");
+        hotelIdLabel.setBounds(80, 110, 65, 25);
+        add(hotelIdLabel);
 
-        name = new JLabel("Name:");
-        name.setBounds(130, 100, 50, 25);
-        add(name);
+        nameLabel = new JLabel("Name:");
+        nameLabel.setBounds(280, 110, 50, 25);
+        add(nameLabel);
 
-        location = new JLabel("Location:");
-        location.setBounds(230, 100, 65, 25);
-        add(location);
+        locationLabel = new JLabel("Location:");
+        locationLabel.setBounds(515, 110, 65, 25);
+        add(locationLabel);
 
-        rating = new JLabel("Rating:");
-        rating.setBounds(330, 100, 50, 25);
-        add(rating);
+        ratingLabel = new JLabel("Rating:");
+        ratingLabel.setBounds(725, 110, 50, 25);
+        add(ratingLabel);
 
-        txtHotelId = new JTextField();
-        txtHotelId.setBounds(90, 100, 35, 25);
-        add(txtHotelId);
+        String[] hotelIds = {"", "HT001", "HT002", "HT003", "HT004", "HT005"};
+        cmbHotelId = new JComboBox<>(hotelIds);
+        cmbHotelId.setBounds(145, 110, 110, 25);
+        add(cmbHotelId);
 
-        txtName = new JTextField();
-        txtName.setBounds(180, 100, 45, 25);
-        add(txtName);
+        String[] hotelNames = {"", "Grand Hotel", "City Inn", "Mountain View", "Beach Resort", "Sunset Lounge"};
+        cmbName = new JComboBox<>(hotelNames);
+        cmbName.setBounds(330, 110, 160, 25);
+        add(cmbName);
 
-        txtLocation = new JTextField();
-        txtLocation.setBounds(290, 100, 35, 25);
-        add(txtLocation);
+        String[] locations = {"", "Manila", "Cebu", "Davao", "Boracay", "Palawan"};
+        cmbLocation = new JComboBox<>(locations);
+        cmbLocation.setBounds(580, 110, 120, 25);
+        add(cmbLocation);
 
-        txtRating = new JTextField();
-        txtRating.setBounds(375, 100, 40, 25);
-        add(txtRating);
+        String[] ratings = {"", "1.0", "1.6", "2.0", "2.3", "3.0", "3.7", "4.0", "4.2", "5.0"};
+        cmbRating = new JComboBox<>(ratings);
+        cmbHotelId.setBounds(775, 110, 90, 25);
+        add(cmbRating);
 
         btnSearch = new JButton("Search");
-        btnSearch.setBounds(325, 135, 90, 25);
+        btnSearch.setBounds(430, 155, 100, 30);
         btnSearch.addActionListener(this);
         add(btnSearch);
 
-        btnBook = new JButton("Book");
-        btnBook.setBounds(325, 375, 70, 30);
-        btnBook.addActionListener(this);
-        add(btnBook);
-
         btnBack = new JButton("Back");
-        btnBack.setBounds(20, 20, 70, 30);
+        btnBack.setBounds(20, 20, 80, 30);
         btnBack.addActionListener(this);
         add(btnBack);
 
         hotelPanel = new JPanel();
-        hotelPanel.setBounds(30, 170, 365, 190);
+        hotelPanel.setBounds(80, 210, 820, 350);
 
 hotelPanel.setBorder(BorderFactory.createTitledBorder("Available Hotels"));
         hotelPanel.setLayout(null);
+
+        JLabel lblHotelId = new JLabel("Hotel ID");
+        lblHotelId.setBounds(20, 25, 120, 25);
+        hotelPanel.add(lblHotelId);
+
+        JLabel lblName = new JLabel("Name");
+        lblName.setBounds(170, 25, 200, 25);
+        hotelPanel.add(lblName);
+
+        JLabel lblLocation = new JLabel("Location");
+        lblLocation.setBounds(430, 25, 150, 25);
+        hotelPanel.add(lblLocation);
+
+        JLabel lblRating = new JLabel("Rating");
+        lblRating.setBounds(650, 25, 100, 25);
+        hotelPanel.add(lblRating);
         
         hotelListModel = new DefaultListModel<>();
         hotelList = new JList<>(hotelListModel);
         JScrollPane scrollPane = new JScrollPane(hotelList);
-        scrollPane.setBounds(10, 20, 345, 160);
+        scrollPane.setBounds(15, 55, 790, 280);
         hotelPanel.add(scrollPane);
         
         add(hotelPanel);
+
+        btnBookHotel = new JButton("Book Hotel");
+        btnBookHotel.setBounds(80, 580, 130, 35);
+        btnBookHotel.addActionListener(this);
+        add(btnBookHotel);
     }
 
     @Override
@@ -99,8 +118,8 @@ hotelPanel.setBorder(BorderFactory.createTitledBorder("Available Hotels"));
         if (e.getSource() == btnSearch) {
             searchHotels();
         }
-        else if (e.getSource() == btnBook) {
-            bookHotel();
+        else if (e.getSource() == btnBookHotel) {new hotelGUI().setVisible(true);
+            dispose();
         }
         else if (e.getSource() == btnBack) {
             new dashboardGUI().setVisible(true);
@@ -109,61 +128,57 @@ hotelPanel.setBorder(BorderFactory.createTitledBorder("Available Hotels"));
     }
     
     private void searchHotels() {
-        String id = txtHotelId.getText().trim();
-        String hotelName = txtName.getText().trim();
-        String loc = txtLocation.getText().trim();
-        String rateText = txtRating.getText().trim();
+        String selectedId = (String) cmbHotelId.getSelectedItem();
+        String selectedName = (String) cmbName.getSelectedItem();
+        String selectedLoc = (String) cmbLocation.getSelectedItem();
+        String selectedRate = (String) cmbRating.getSelectedItem();
         
         hotelListModel.clear();
         
-        if (id.isEmpty() && hotelName.isEmpty() && loc.isEmpty() && rateText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter at least one search field!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+        boolean allEmpty = 
+            (selectedId == null || selectedId.isEmpty()) &&
+            (selectedName == null || selectedName.isEmpty()) &&
+            (selectedLoc == null || selectedLoc.isEmpty()) &&
+            (selectedRate == null || selectedRate.isEmpty());
+
+        if (allEmpty) {
+            JOptionPane.showMessageDialog(this, "Please select at least one search filter!", "Notice", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        
-        StringBuilder result = new StringBuilder();
-        if (!id.isEmpty()) result.append("ID: ").append(id).append(" ");
-        if (!hotelName.isEmpty()) result.append("Name: ").append(hotelName).append(" ");
-        if (!loc.isEmpty()) result.append("Location: ").append(loc).append(" ");
-        if (!rateText.isEmpty()) result.append("Rating: ").append(rateText);
-        
-        hotelListModel.addElement(result.toString());
-        JOptionPane.showMessageDialog(this, "Search completed!", "Search", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    private void bookHotel() {
-        String selected = hotelList.getSelectedValue();
-        if (selected == null) {
-            JOptionPane.showMessageDialog(this, "Please search and select a hotel first!", "No Selection made", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        JOptionPane.showMessageDialog(this, "Hotel booked successfully!\n\n" + selected, "Booking Confirmed", JOptionPane.INFORMATION_MESSAGE);
-        hotelListModel.clear();
-        txtHotelId.setText("");
-        txtName.setText("");
-        txtLocation.setText("");
-        txtRating.setText("");
-    }
-    
-    // Hotel Class
-    public class Hotel {
-        private String hotelId;
-        private String name;
-        private String location;
-        private double rating;
 
-        public Hotel(String hotelId, String name, String location, double rating) {
-            this.hotelId = hotelId;
-            this.name = name;
-            this.location = location;
-            this.rating = rating;
+        // Sample hotel data
+        String[][] hotelsData = {
+            {"HT001", "Grand Hotel", "Manila", "4.5"},
+            {"HT002", "Beach Resort", "Cebu", "4.7"},
+            {"HT003", "City Inn", "Davao", "4.2"},
+            {"HT004", "Mountain View", "Boracay", "4.0"},
+            {"HT005", "Sunset Lodge", "Palawan", "5.0"}
+        };
+
+        // Filter results based on selections
+        for (String[] hotel : hotelsData) {
+            boolean match = true;
+            if (selectedId != null && !selectedId.isEmpty() && !hotel[0].equals(selectedId)) match = false;
+            if (selectedName != null && !selectedName.isEmpty() && !hotel[1].equals(selectedName)) match = false;
+            if (selectedLoc != null && !selectedLoc.isEmpty() && !hotel[2].equals(selectedLoc)) match = false;
+            if (selectedRate != null && !selectedRate.isEmpty() && !hotel[3].equals(selectedRate)) match = false;
+
+            if (match) {
+                hotelListModel.addElement(
+                    hotel[0] + "    " + 
+                    String.format("%-15s", hotel[1]) + 
+                    String.format("%-12s", hotel[2]) + 
+                    " ⭐ " + hotel[3]
+                );
+            }
         }
 
-        public String getHotelId() { return hotelId; }
-        public String getName() { return name; }
-        public String getLocation() { return location; }
-        public double getRating() { return rating; }
+        if (hotelListModel.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hotels match your search criteria.", "No Results", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, hotelListModel.size() + " hotel(s) found!", "Search Results", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
     }
 }
-
         
