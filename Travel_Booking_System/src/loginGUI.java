@@ -1,4 +1,6 @@
 
+
+import java.sql.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -14,12 +16,23 @@ import javax.swing.*;
  */
 public class loginGUI extends JFrame implements ActionListener {
     
-     private JLabel loginform,user,pass;
+    private JLabel loginform,user,pass;
     private JTextField txtuser;
     private JPasswordField txtpass;
     private JButton btnlogin, btnclear;
+    private JCheckBox showpass;
+   
+    // Connection
+    Connection conn = null;
+    ResultSet  rs =  null;
+    PreparedStatement pst = null;
     
       loginGUI(){
+        initComponents();
+        
+        conn = MysqlConnect.ConnectDB();
+        
+        
         setTitle("Travel Booking System");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,19 +61,19 @@ public class loginGUI extends JFrame implements ActionListener {
         txtpass.setBounds(160, 160, 150, 20);
         add(txtpass);
         
+        showpass = new JCheckBox("Show Password");
+        showpass.setBounds(160, 185, 150, 25);
+        add(showpass); 
+        showpass.addActionListener(this);
+        
         btnlogin = new JButton("Log In");
         btnlogin.setBounds(240, 220, 70, 20);
+        btnlogin.addActionListener(this);
         add(btnlogin);
-        
-        btnlogin.addActionListener (e-> {
-        new dashboardGUI().setVisible(true); 
-        dispose();
-        });
-        
-        
         
         btnclear = new JButton("Clear");
         btnclear.setBounds(160, 220, 70, 20);
+        btnclear.addActionListener(this);
         add(btnclear);
         
         
@@ -72,7 +85,68 @@ public class loginGUI extends JFrame implements ActionListener {
       
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    
+        
+        if (e.getSource() == btnclear) {
+                txtuser.setText("");
+                txtpass.setText("");
+                txtuser.requestFocus();
+                return;
+                
+        }   if (e.getSource() == showpass) {
+              if (showpass.isSelected()) {
+            txtpass.setEchoChar((char) 0);
+        } else {
+            txtpass.setEchoChar('•');
+        }
+        return;
+    }
+         if (e.getSource() == btnlogin) {
+
+        if (conn == null) {
+            JOptionPane.showMessageDialog(
+                this, "Database connection failed.");
+            return;
+        }
+
+        String username = txtuser.getText().trim();
+        String password = new String(txtpass.getPassword());
+
+      
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this, "Please enter your username and password.");
+            return;
+        }
+
+              
+              
+      try {
+           String sql = "SELECT * FROM logindb " +" where username=? AND password =?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, txtuser.getText().trim());
+            pst.setString(2, new String(txtpass.getPassword()));
+
+            rs = pst.executeQuery();
+              
+              if (rs.next()) {
+                JOptionPane.showMessageDialog(this, "Login Successful!");
+                // Open Dashboard
+                dashboardGUI dashboard = new dashboardGUI();
+                dashboard.setVisible(true);
+                // Close Login Frame
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(
+                    this, "Incorrect username or password");
+            }
+     }catch (SQLException ex) {
+       
+        }
     }
       
-}
+    }
+
+    private void initComponents() {
+    }         
+    }
