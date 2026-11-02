@@ -15,10 +15,8 @@ public class packageGUI extends JFrame implements ActionListener {
         setTitle("Travel Booking System");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 700);
-        setLocationRelativeTo(null);
-        setResizable(false);
-
+        setSize(1000, 1000);
+        
         Package = new JLabel("Package");
         Package.setBounds(430, 40, 150, 50);
         add(Package);
@@ -74,9 +72,9 @@ public class packageGUI extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        
         if (e.getSource() == btnback) {
-            new packageGUI().setVisible(true);
+            new dashboardGUI().setVisible(true);
             dispose();
         }
 
