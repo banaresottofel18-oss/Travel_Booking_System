@@ -20,6 +20,7 @@ public class loginGUI extends JFrame implements ActionListener {
     private JTextField txtuser;
     private JPasswordField txtpass;
     private JButton btnlogin, btnclear;
+    private JCheckBox showpass;
    
     // Connection
     Connection conn = null;
@@ -60,6 +61,11 @@ public class loginGUI extends JFrame implements ActionListener {
         txtpass.setBounds(160, 160, 150, 20);
         add(txtpass);
         
+        showpass = new JCheckBox("Show Password");
+        showpass.setBounds(160, 185, 150, 25);
+        add(showpass); 
+        showpass.addActionListener(this);
+        
         btnlogin = new JButton("Log In");
         btnlogin.setBounds(240, 220, 70, 20);
         btnlogin.addActionListener(this);
@@ -79,28 +85,40 @@ public class loginGUI extends JFrame implements ActionListener {
       
     @Override
     public void actionPerformed(ActionEvent e) {
+    
         
         if (e.getSource() == btnclear) {
                 txtuser.setText("");
                 txtpass.setText("");
                 txtuser.requestFocus();
                 return;
-}
+                
+        }   if (e.getSource() == showpass) {
+              if (showpass.isSelected()) {
+            txtpass.setEchoChar((char) 0);
+        } else {
+            txtpass.setEchoChar('•');
+        }
+        return;
+    }
          if (e.getSource() == btnlogin) {
 
-            if (conn == null) {
-                JOptionPane.showMessageDialog(
-                    this, "Database connection failed.");
-                return;
-            }
-               String username = txtuser.getText().trim();
-               String password = new String(txtpass.getPassword());
-            
-             if (username.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(
-                    this, "Please enter your username and password.");
-                return;
-             }
+        if (conn == null) {
+            JOptionPane.showMessageDialog(
+                this, "Database connection failed.");
+            return;
+        }
+
+        String username = txtuser.getText().trim();
+        String password = new String(txtpass.getPassword());
+
+      
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this, "Please enter your username and password.");
+            return;
+        }
+
               
               
       try {
@@ -128,10 +146,7 @@ public class loginGUI extends JFrame implements ActionListener {
     }
       
     }
-           
-    
-    private void initComponents() {
 
+    private void initComponents() {
+    }         
     }
-      
-}
