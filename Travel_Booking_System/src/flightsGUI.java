@@ -5,6 +5,11 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import java.sql.Time;
+import java.time.LocalTime;
+import java.util.LinkedList;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -24,6 +29,9 @@ public class flightsGUI extends JFrame implements ActionListener{
     private DefaultTableModel Model;
     private JTable Table;
     private JScrollPane Scroll;
+    private String user ;
+    private LinkedList<Flight> show = new LinkedList<>();
+   
    
 
 
@@ -54,11 +62,11 @@ public class flightsGUI extends JFrame implements ActionListener{
         date.setBounds(540, 150, 50, 30);
         add(date);
  
-        fromBox = new JComboBox<> ( new String[]{"Manila","Cebu "," Iloilo" ," Bacolod", "kalibo"," tacloban"," Bohol"," Davao"," Cagayan de Oro"," General Santos"," Zamboanga"," Butuan"," Dipolog "});
+        fromBox = new JComboBox<> ();
         fromBox.setBounds(100, 150, 150, 30);
         add(fromBox);
 
-        toBox = new JComboBox<> ( new String[]{"Manila","Cebu "," Iloilo" ," Bacolod", "kalibo"," tacloban"," Bohol"," Davao"," Cagayan de Oro"," General Santos"," Zamboanga"," Butuan"," Dipolog "});
+        toBox = new JComboBox<> ();
         toBox.setBounds(340, 150, 150, 30);
         add(toBox);
         
@@ -66,7 +74,7 @@ public class flightsGUI extends JFrame implements ActionListener{
         dateBox.setBounds(600, 150, 150, 30);
         add(dateBox);
         
-        Model = new DefaultTableModel(new String []  {"Flight ID", "Departure"," Arrival","Price","Date"},0);
+        Model = new DefaultTableModel(new String []  {"Flight ID", "Departure"," Arrival","Price","Date", "Depart "},0);
         Table = new JTable(Model);
         Scroll = new JScrollPane(Table);
         Scroll.setBounds(50,210,860,530);
@@ -89,44 +97,84 @@ public class flightsGUI extends JFrame implements ActionListener{
         btnback.addActionListener(this);
     
     }
-    private void loadFlights() {
-      
-        Model.setRowCount(0); 
- 
-        String sql = "SELECT `FlightId`, `Departure`, `Arrival`, `Price`, `Date` "
-                   + "FROM `flightsdb` WHERE `Departure` = ? AND `Arrival` = ? AND `Date` = ?";
- 
-        try (Connection conn = MysqlConnect.ConnectDB()) {
-            if (conn == null) {
-                return; 
+    
+    private void loadCites(){
+         Connection conn = MysqlConnect.ConnectDB();
+        if (conn == null) {
+            return;
+        }
+        try {
+            PreparedStatement pst = conn.prepareStatement(
+                    "SELECT Departure AS city FROM flightsdb UNION SELECT Arrival FROM flightsdb ORDER BY city");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                fromBox.addItem(rs.getString("city"));
+                toBox.addItem(rs.getString("city"));
             }
-            try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, fromBox.getSelectedItem().toString().trim());
-                ps.setString(2, toBox.getSelectedItem().toString().trim());
-                ps.setString(3, dateBox.getSelectedItem().toString().trim());
- 
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        Model.addRow(new Object[]{
-                            rs.getString("FlightId"),
-                            rs.getString("Departure"),
-                            rs.getString("Arrival"),
-                            rs.getString("Price"),
-                            rs.getString("Date")
-                        });
-                    }
-                }
-            }
-            if (Model.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(this, "No Available Flights!.");
-            }
-        } catch (Exception ex) {
-             ex.printStackTrace();
+            conn.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Could not load cities: " + ex.getMessage(),
+                    "Database error", JOptionPane.ERROR_MESSAGE);
         }
     }
- 
-    
+    private void loadFlights() {
+        
+         if (fromBox.getSelectedItem() == null || toBox.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this,
+                    "There are no flights yet. The admin has to add flights first.",
+                    "Error Message", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+         
+         String origin = fromBox.getSelectedItem().toString();
+         String destination = toBox.getSelectedItem().toString();
+         String period = dateBox.getSelectedItem().toString();
+         
+         if (origin.equalsIgnoreCase(destination)) {
+            JOptionPane.showMessageDialog(this, "Departure and arrival cities must be different.",
+                    "Error Message", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Model.setRowCount(0);
+         Connection conn = MysqlConnect.ConnectDB();
+        if (conn == null) {
+            return;
+        }
+        try {
+            String sql = "SELECT FlightId, Departure, Arrival, Price, `Date`, DepartureTime "
+                    + "FROM flightsdb WHERE Departure = ? AND Arrival = ? AND `Date` = ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, origin);
+            pst.setString(2, destination);
+            pst.setString(3, period);
+            ResultSet rs = pst.executeQuery();
+            flightTree tree = new flightTree();
+            while (rs.next()) {
+                LocalTime time = null;
+                Time t = rs.getTime("DepartureTime");
+                if (t != null) {
+                    time = t.toLocalTime();
+                }
+                tree.add(new Flight(rs.getString("FlightId"), rs.getString("Departure"),
+                        rs.getString("Arrival"), rs.getDouble("Price"), rs.getString("Date"), time));
+            }
+            conn.close();
+            show = tree.inOrder();  
 
+            
+            for (Flight f : show) {
+                Model.addRow(new Object[]{f.getFlightId(), f.getDeparture(), f.getArrival(),
+                    String.format("%,.2f", f.getPrice()), f.getDate(), f.getDepartureTimeText()});
+            }
+            if (show.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No Available Flights!.");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Could not load flights: " + ex.getMessage(),
+                    "Database error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         
@@ -135,7 +183,7 @@ public class flightsGUI extends JFrame implements ActionListener{
             dispose();
         } else if (e.getSource() == btnsearch) {
             loadFlights();
-        }      
+        }  
       }
     
 }
