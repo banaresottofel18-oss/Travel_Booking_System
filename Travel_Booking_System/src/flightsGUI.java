@@ -31,15 +31,14 @@ public class flightsGUI extends JFrame implements ActionListener{
     private JScrollPane Scroll;
     private String user ;
     private LinkedList<Flight> show = new LinkedList<>();
+    private String userSes;
    
-   
 
 
 
-    flightsGUI(){
-        
-        
-      
+    flightsGUI(String userSes){
+        this.userSes = userSes;
+
         setTitle ("Travel Booking System");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -179,7 +178,7 @@ public class flightsGUI extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         
         if(e.getSource() == btnback){
-            new dashboardGUI().setVisible(true);
+            new dashboardGUI(userSes).setVisible(true);
             dispose();
         } else if (e.getSource() == btnsearch) {
             loadFlights();

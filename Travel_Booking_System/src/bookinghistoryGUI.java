@@ -14,9 +14,10 @@ public class bookinghistoryGUI extends JFrame implements ActionListener {
     private JList<String> flightList;
     private JList<String> hotelList;
     private JList<String> packageList;
+    private String userSes;
     
-    bookinghistoryGUI(){
-        
+    bookinghistoryGUI(String userSes){
+          this.userSes = userSes;
         setTitle("Travel Booking History");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,6 +93,7 @@ public class bookinghistoryGUI extends JFrame implements ActionListener {
         
         btnback.addActionListener(this);
         btnview.addActionListener(this);
+        
                 
 }
 
@@ -99,7 +101,7 @@ public class bookinghistoryGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
     
             if (e.getSource() == btnback) {
-            new dashboardGUI().setVisible(true);
+            new dashboardGUI(userSes).setVisible(true);
             dispose();
         }
 

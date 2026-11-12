@@ -16,11 +16,12 @@ import javax.swing.*;
  */
 public class loginGUI extends JFrame implements ActionListener {
     
-    private JLabel loginform,user,pass;
+    private JLabel loginform,user,pass,noacc;
     private JTextField txtuser;
     private JPasswordField txtpass;
-    private JButton btnlogin, btnclear;
+    private JButton btnlogin, btnclear,btncacc;
     private JCheckBox showpass;
+    private String  userSes;
    
     // Connection
     Connection conn = null;
@@ -76,11 +77,17 @@ public class loginGUI extends JFrame implements ActionListener {
         btnclear.addActionListener(this);
         add(btnclear);
         
+        btncacc = new JButton("Create New  Acc");
+        btncacc.setBounds(160, 290, 150, 25);
+        btncacc.addActionListener(this);
+        add(btncacc);
         
-        user = new JLabel();
-        user.setBounds(WIDTH, WIDTH, WIDTH, HEIGHT);
-        pass = new JLabel();
-        add(loginform);
+        noacc= new JLabel("No Account?");
+        noacc.setBounds(200, 260, 150, 25);
+        noacc.setFont(noacc.getFont().deriveFont(12.0f));
+        add(noacc);
+        
+        
       }
       
     @Override
@@ -99,8 +106,14 @@ public class loginGUI extends JFrame implements ActionListener {
         } else {
             txtpass.setEchoChar('•');
         }
-        return;
+      
     }
+         if (e.getSource() == btncacc) {
+            CreateAccGUI register = new CreateAccGUI();
+            register.setVisible(true);
+            this.dispose();
+            return;
+         }
          if (e.getSource() == btnlogin) {
 
         if (conn == null) {
@@ -132,7 +145,7 @@ public class loginGUI extends JFrame implements ActionListener {
               if (rs.next()) {
                 JOptionPane.showMessageDialog(this, "Login Successful!");
                 // Open Dashboard
-                dashboardGUI dashboard = new dashboardGUI();
+                dashboardGUI dashboard = new dashboardGUI(userSes);
                 dashboard.setVisible(true);
                 // Close Login Frame
                 this.dispose();

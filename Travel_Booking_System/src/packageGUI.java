@@ -10,8 +10,10 @@ public class packageGUI extends JFrame implements ActionListener {
     private JTextField txtfrom, txtto, txtdate;
     private JButton btnsearch, btnbook, btnback;
     private JPanel packagePanel;
+    private String userSes;
 
-    packageGUI() {
+    packageGUI(String userSes) {
+        this.userSes = userSes;
         setTitle("Travel Booking System");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,7 +76,7 @@ public class packageGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         
         if (e.getSource() == btnback) {
-            new dashboardGUI().setVisible(true);
+            new dashboardGUI(userSes).setVisible(true);
             dispose();
         }
 

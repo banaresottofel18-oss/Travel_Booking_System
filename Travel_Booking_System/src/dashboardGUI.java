@@ -14,10 +14,13 @@ import java.awt.Font;
  */
 public class dashboardGUI extends JFrame implements ActionListener {
     
-        private JButton btnf, btnh,btnp,btnbh;
-        private JLabel welcome, text1, text2, services, desc, footer, line1, line2;
+        private JButton btnf, btnh, btnp, btnbh, btnaf, btnlogout;
+        private JLabel welcome, text1, text2, services, desc, footer, line1, line2, adminLabel;
+            private String userSes;
         
-    dashboardGUI(){
+    dashboardGUI( String userSes){
+        this.userSes = userSes;
+        
         setTitle("Travel Booking System");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,11 +45,17 @@ public class dashboardGUI extends JFrame implements ActionListener {
         btnbh.setBounds(530, 505, 190, 55);
         btnbh.setFont(new Font("Arial", Font.BOLD, 16));
         add(btnbh);
+        btnlogout = new JButton("Logout");
+        btnlogout.setBounds(420, 740, 160, 45);
+        add(btnlogout);
+        btnlogout.addActionListener(this);
        
         btnf.addActionListener(this);
         btnh.addActionListener(this);
         btnbh.addActionListener(this);
         btnp.addActionListener(this);
+        
+        
         
         welcome = new JLabel("Welcome!");
         welcome.setBounds(250, 100, 500, 45);
@@ -91,32 +100,59 @@ public class dashboardGUI extends JFrame implements ActionListener {
         add(footer);
         
         
+         if (userSes.equals("admin")) {
+            adminLabel = new JLabel("Admin: add data");
+            adminLabel.setBounds(280, 600, 300, 30);
+            adminLabel.setFont(new Font("Arial", Font.BOLD, 16));
+            add(adminLabel);
+
+            btnaf = new JButton("Add Flight");
+            btnaf.setBounds(230, 640, 160, 50);
+            add(btnaf);
+         }
         
     }
     @Override
 public void actionPerformed(ActionEvent e) {
-    if (e.getSource() == btnf) {
-        flightsGUI flight = new flightsGUI();
-        flight.setVisible(true);
-        dispose();
-    }
-    
-    if (e.getSource() == btnh){
-        hotelGUI hotel = new hotelGUI();
+   if (e.getSource() == btnf) {
+            flightsGUI flight = new flightsGUI(userSes);
+            flight.setVisible(true);
+            dispose();
+    }  
+    else if (e.getSource() == btnh){
+        hotelGUI hotel = new hotelGUI(userSes);
         hotel.setVisible(true);
         dispose();
     }
-     if (e.getSource() == btnbh) {
-         bookinghistoryGUI history = new bookinghistoryGUI();
+    else if (e.getSource() == btnp) {
+            packageGUI pack = new packageGUI(userSes);
+            pack.setVisible(true);
+            dispose();
+    }
+    else if (e.getSource() == btnbh) {
+         bookinghistoryGUI history = new bookinghistoryGUI(userSes);
          history.setVisible(true);
          dispose();
-     }
-     if (e.getSource() == btnp) {
-         packageGUI pack = new packageGUI();
+    }
+    else if (e.getSource() == btnp) {
+         packageGUI pack = new packageGUI(userSes);
          pack.setVisible(true);
          dispose();
      }
+   else if (e.getSource() == btnaf) {
+            new addFlightGUI(userSes).setVisible(true);
+            dispose();
     }
+   else if (e.getSource() == btnlogout) {
+            int answer = JOptionPane.showConfirmDialog(this, "Are you sure you want to log out?",
+                    "Logout", JOptionPane.YES_NO_OPTION);
+            if (answer == JOptionPane.YES_OPTION) {
+                new loginGUI().setVisible(true);
+                dispose();
+            
+            }
+   }
+}
 
 
 }

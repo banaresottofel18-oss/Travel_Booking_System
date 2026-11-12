@@ -20,8 +20,10 @@ public class hotelGUI extends JFrame implements ActionListener{
     private JPanel hotelPanel;
     private DefaultListModel<String> hotelListModel;
     private JList<String> hotelList;
+    private  String userSes;
 
-    public hotelGUI(){
+    public hotelGUI(String userSes){
+          this.userSes = userSes;
         setTitle ("Travel Booking System");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        setSize(1000, 1000);
@@ -118,11 +120,11 @@ hotelPanel.setBorder(BorderFactory.createTitledBorder("Available Hotels"));
         if (e.getSource() == btnSearch) {
             searchHotels();
         }
-        else if (e.getSource() == btnBookHotel) {new hotelGUI().setVisible(true);
+        else if (e.getSource() == btnBookHotel) {new hotelGUI(userSes).setVisible(true);
             dispose();
         }
         else if (e.getSource() == btnBack) {
-            new dashboardGUI().setVisible(true);
+            new dashboardGUI(userSes).setVisible(true);
             dispose();
         }
     }
