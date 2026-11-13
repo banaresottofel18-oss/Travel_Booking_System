@@ -14,8 +14,8 @@ import java.awt.Font;
  */
 public class dashboardGUI extends JFrame implements ActionListener {
     
-        private JButton btnf, btnh, btnp, btnbh, btnaf, btnlogout;
-        private JLabel welcome, text1, text2, services, desc, footer, line1, line2, adminLabel;
+        private JButton btnf, btnh, btnp, btnbh, btnaf, btnlogout,btnah, btnap;
+        private JLabel welcome, text1, text2, services, desc, footer, line1, line2;
             private String userSes;
         
     dashboardGUI( String userSes){
@@ -56,8 +56,24 @@ public class dashboardGUI extends JFrame implements ActionListener {
         btnp.addActionListener(this);
         
         
-        
-        welcome = new JLabel("Welcome!");
+        if ("admin".equals(userSes)) {
+            btnaf = new JButton("Add Flight");
+            btnaf.setBounds(230, 640, 160, 50);
+            add(btnaf);
+
+            btnah = new JButton("Add Hotel");
+            btnah.setBounds(420, 640, 160, 50);
+            add(btnah);
+
+            btnap = new JButton("Add Package");
+            btnap.setBounds(610, 640, 160, 50);
+            add(btnap);
+
+            btnaf.addActionListener(this);
+            btnah.addActionListener(this);
+            btnap.addActionListener(this);
+        }
+        welcome = new JLabel("Welcome!!");
         welcome.setBounds(250, 100, 500, 45);
         welcome.setFont(new Font("Arial", Font.BOLD, 30));
         welcome.setHorizontalAlignment(JLabel.CENTER);
@@ -98,18 +114,6 @@ public class dashboardGUI extends JFrame implements ActionListener {
         footer.setFont(new Font("Arial", Font.PLAIN, 14));
         footer.setHorizontalAlignment(JLabel.CENTER);
         add(footer);
-        
-        
-         if (userSes.equals("admin")) {
-            adminLabel = new JLabel("Admin: add data");
-            adminLabel.setBounds(280, 600, 300, 30);
-            adminLabel.setFont(new Font("Arial", Font.BOLD, 16));
-            add(adminLabel);
-
-            btnaf = new JButton("Add Flight");
-            btnaf.setBounds(230, 640, 160, 50);
-            add(btnaf);
-         }
         
     }
     @Override

@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.sql.Statement;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.LinkedList;
@@ -38,6 +38,7 @@ public class flightsGUI extends JFrame implements ActionListener{
 
     flightsGUI(String userSes){
         this.userSes = userSes;
+        loadCites();
 
         setTitle ("Travel Booking System");
         setLayout(null);
@@ -94,7 +95,7 @@ public class flightsGUI extends JFrame implements ActionListener{
         btnsearch.addActionListener(this);
         btnbook.addActionListener(this);
         btnback.addActionListener(this);
-    
+
     }
     
     private void loadCites(){
@@ -173,7 +174,54 @@ public class flightsGUI extends JFrame implements ActionListener{
                     "Database error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+    private void bookSelectedFlight() {
+        int row = Table.getSelectedRow();
+        if (row < 0 || row >= show.size()) {
+            JOptionPane.showMessageDialog(this, "Select a flight first before booking",
+                    "Error Message", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Flight f = show.get(row);
+ 
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Book flight " + f + "\nPrice: PHP " + String.format("%,.2f", f.getPrice()) + "?",
+                "Confirm booking", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+ 
+       Booking booking = new Booking(userSes, f.getFlightId(), f.getPrice(),
+        "Flight " + f.getFlightId() + ": " + f.getDeparture() + " to " + f.getArrival()
+        + ", " + f.getDate() + ", departs " + f.getDepartureTimeText());
+        
+        Connection conn = MysqlConnect.ConnectDB();
+        if (conn == null) {
+            return;
+        }
+        try {
+            String sql = "INSERT INTO bookings (user_id, flight_id, hotel_id, package_id, total_price, description) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pst.setString(1, booking.getUserId());
+            pst.setString(2, booking.getFlightId());
+            pst.setString(3, null);
+            pst.setString(4, null);
+            pst.setDouble(5, booking.getTotalPrice());
+            pst.setString(6, booking.getDescription());
+            pst.executeUpdate();
+ 
+            ResultSet keys = pst.getGeneratedKeys();
+            if (keys.next()) {
+                booking.setBookingId(keys.getInt(1));
+            }
+            conn.close();
+ 
+            JOptionPane.showMessageDialog(this, "Flight booked!");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Could not save your booking: " + ex.getMessage(),
+                    "Database error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         
@@ -182,7 +230,9 @@ public class flightsGUI extends JFrame implements ActionListener{
             dispose();
         } else if (e.getSource() == btnsearch) {
             loadFlights();
-        }  
+        }  else if (e.getSource() == btnbook) {
+            bookSelectedFlight();
+        }
       }
     
 }

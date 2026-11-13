@@ -7,10 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalTime;
 import javax.swing.*;
-
-
-
 import javax.swing.table.DefaultTableModel;
+
+
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -168,7 +167,7 @@ public class addFlightGUI extends JFrame implements ActionListener {
 
             LocalTime time;
             try {
-                time = LocalTime.parse(txttime.getText().trim());   // example: 08:30
+                time = LocalTime.parse(txttime.getText().trim());
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Departure time must look like 08:30 or 14:45",
                         "Error Message", JOptionPane.ERROR_MESSAGE);
@@ -201,8 +200,7 @@ public class addFlightGUI extends JFrame implements ActionListener {
                 loadFlights();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this,
-                        "Could not add the flight (is that Flight ID already used?): " + ex.getMessage(),
-                        "Database error", JOptionPane.ERROR_MESSAGE);
+                        "Could not add Flight ID is already used");   
             }
         }
     }

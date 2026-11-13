@@ -144,6 +144,20 @@ public class loginGUI extends JFrame implements ActionListener {
               
               if (rs.next()) {
                 JOptionPane.showMessageDialog(this, "Login Successful!");
+                
+                 CustomerTable customers = new CustomerTable();
+                pst = conn.prepareStatement("SELECT username, password FROM logindb");
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    customers.put(new Customer(rs.getString("username"), rs.getString("password")));
+                }
+                Customer customer = customers.get(username);
+                
+              if (customer != null) {
+                    userSes = customer.getUserId();
+                } else {
+                    userSes = username;
+                }
                 // Open Dashboard
                 dashboardGUI dashboard = new dashboardGUI(userSes);
                 dashboard.setVisible(true);
@@ -154,7 +168,8 @@ public class loginGUI extends JFrame implements ActionListener {
                     this, "Incorrect username or password");
             }
      }catch (SQLException ex) {
-       
+       JOptionPane.showMessageDialog(this, "Login failed: " + ex.getMessage(),
+                    "Database error", JOptionPane.ERROR_MESSAGE);
         }
     }
       
