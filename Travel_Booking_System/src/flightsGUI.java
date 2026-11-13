@@ -38,7 +38,7 @@ public class flightsGUI extends JFrame implements ActionListener{
 
     flightsGUI(String userSes){
         this.userSes = userSes;
-        loadCites();
+        
 
         setTitle ("Travel Booking System");
         setLayout(null);
@@ -95,7 +95,8 @@ public class flightsGUI extends JFrame implements ActionListener{
         btnsearch.addActionListener(this);
         btnbook.addActionListener(this);
         btnback.addActionListener(this);
-
+        
+        loadCites();
     }
     
     private void loadCites(){
