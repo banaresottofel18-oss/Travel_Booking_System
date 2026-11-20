@@ -100,6 +100,10 @@ public class bookinghistoryGUI extends JFrame implements ActionListener {
         btnback.addActionListener(this);
         btnview.addActionListener(this);
         
+        if (bookings.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "You don't have any booking records yet.", "Booking History", JOptionPane.INFORMATION_MESSAGE );
+        }
+        
         for (Booking booking : bookings) {
 
         String bookingInfo = "#" + booking.getBookingId()
