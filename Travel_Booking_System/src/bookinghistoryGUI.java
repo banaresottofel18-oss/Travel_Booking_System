@@ -2,6 +2,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.*;
+import java.sql.*;
 
 public class bookinghistoryGUI extends JFrame implements ActionListener {
  
@@ -15,9 +16,14 @@ public class bookinghistoryGUI extends JFrame implements ActionListener {
     private JList<String> hotelList;
     private JList<String> packageList;
     private String userSes;
+    private BookingHistory bookingHistory;
+    private ArrayList<Booking> bookings;
     
     bookinghistoryGUI(String userSes){
-          this.userSes = userSes;
+        this.userSes = userSes;
+        bookingHistory = new BookingHistory();
+        bookings = bookingHistory.getBookings(userSes);
+        
         setTitle("Travel Booking History");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,6 +100,22 @@ public class bookinghistoryGUI extends JFrame implements ActionListener {
         btnback.addActionListener(this);
         btnview.addActionListener(this);
         
+        for (Booking booking : bookings) {
+
+        String bookingInfo = "#" + booking.getBookingId()
+            + " | " + booking.getDescription()
+            + " | Price: " + booking.getTotalPrice()
+            + " | Date: " + booking.getBookingDate();
+
+        if (booking.getPackageId() != null && !booking.getPackageId().isEmpty()) {
+        packageModel.addElement(bookingInfo);
+        } else if (booking.getHotelId() != null && !booking.getHotelId().isEmpty()) {
+        hotelModel.addElement(bookingInfo);
+        } else if (booking.getFlightId() != null && !booking.getFlightId().isEmpty()) {
+        flightModel.addElement(bookingInfo);
+    }
+
+}
                 
 }
 
