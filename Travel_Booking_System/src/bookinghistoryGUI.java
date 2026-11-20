@@ -71,7 +71,7 @@ public class bookinghistoryGUI extends JFrame implements ActionListener {
         btnback.setBounds(50, 40, 90, 35);
         add(btnback);
         
-        btnview = new JButton("View");
+        btnview = new JButton("View Invoice");
         btnview.setBounds(700, 720, 150, 40);
         add(btnview);
         
@@ -100,9 +100,6 @@ public class bookinghistoryGUI extends JFrame implements ActionListener {
         btnback.addActionListener(this);
         btnview.addActionListener(this);
         
-        if (bookings.isEmpty()) {
-    JOptionPane.showMessageDialog(this, "You don't have any booking records yet.", "Booking History", JOptionPane.INFORMATION_MESSAGE );
-        }
         
         for (Booking booking : bookings) {
 
@@ -133,32 +130,52 @@ public class bookinghistoryGUI extends JFrame implements ActionListener {
 
         if (e.getSource() == btnview) {
 
-            String details = "";
+            if (bookings.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "You don't have any booking records yet.");
+        return;
+        }
 
-            if (flightList.getSelectedValue() != null) {
-                details = "Flight: "
-                    + flightList.getSelectedValue();
-            } else if (hotelList.getSelectedValue() != null) {
-                details = "Hotel: "
-                    + hotelList.getSelectedValue();
-            } else if (packageList.getSelectedValue() != null) {
-                details = "Package: "
-                    + packageList.getSelectedValue();
-            }
+         String selectedValue = null;
 
-            if (details.isEmpty()) {
-                JOptionPane.showMessageDialog(
-                    this,
-                    "Please select a booking first."
-                );
-            } else {
-                JOptionPane.showMessageDialog(
-                    this,
-                    details,
-                    "Booking Details",
-                    JOptionPane.INFORMATION_MESSAGE
-                );
-            }
+        if (flightList.getSelectedValue() != null) {
+        selectedValue = flightList.getSelectedValue();
+        } else if (hotelList.getSelectedValue() != null) {
+        selectedValue = hotelList.getSelectedValue();
+        } else if (packageList.getSelectedValue() != null) {
+        selectedValue = packageList.getSelectedValue();
+        }
+
+        if (selectedValue == null) {
+        JOptionPane.showMessageDialog(this, "Please select a booking first.");
+        return;
+        }
+
+        Booking selectedBooking = null;
+
+        for (Booking booking : bookings) {
+
+        String bookingInfo = "#" + booking.getBookingId()
+                + " | " + booking.getDescription()
+                + " | Price: " + booking.getTotalPrice()
+                + " | Date: " + booking.getBookingDate();
+
+        if (bookingInfo.equals(selectedValue)) {
+            selectedBooking = booking;
+            break;
+        }
+        }
+
+        if (selectedBooking != null) {
+
+        Invoice invoice = new Invoice(selectedBooking);
+
+        JOptionPane.showMessageDialog(
+            this,
+            invoice.generateInvoice(),
+            "Booking Invoice",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
         }
     }
 }
