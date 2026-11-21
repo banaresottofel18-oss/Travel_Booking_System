@@ -58,15 +58,15 @@ public class Booking {
     public String getBookingDate() { return bookingDate; }
     
     public String getType() {
-        if (flightId != null && !flightId.isEmpty()) {
-            return "Flight";
-        } else if (hotelId != null && !hotelId.isEmpty()) {
-            return "Hotel";
-        } else if (packageId != null && !packageId.isEmpty()) {
-            return "Package";
-        }
-        return "Unknown";
+    if (packageId != null && !packageId.isEmpty()) {
+        return "Package";
+    } else if (hotelId != null && !hotelId.isEmpty()) {
+        return "Hotel";
+    } else if (flightId != null && !flightId.isEmpty()) {
+        return "Flight";
     }
+    return "Unknown";
+}
 
     @Override
     public String toString() {
