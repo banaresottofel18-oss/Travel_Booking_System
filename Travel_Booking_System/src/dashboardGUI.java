@@ -137,11 +137,6 @@ public void actionPerformed(ActionEvent e) {
          bookinghistoryGUI history = new bookinghistoryGUI(userSes);
          history.setVisible(true);
          dispose();
-    }
-    else if (e.getSource() == btnp) {
-         packageGUI pack = new packageGUI(userSes);
-         pack.setVisible(true);
-         dispose();
      }
    else if (e.getSource() == btnaf) {
             new addFlightGUI(userSes).setVisible(true);
