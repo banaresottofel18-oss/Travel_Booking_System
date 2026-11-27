@@ -141,6 +141,8 @@ public void actionPerformed(ActionEvent e) {
    else if (e.getSource() == btnaf) {
             new addFlightGUI(userSes).setVisible(true);
             dispose();
+    
+   
     }
    else if (e.getSource() == btnlogout) {
             int answer = JOptionPane.showConfirmDialog(this, "Are you sure you want to log out?",

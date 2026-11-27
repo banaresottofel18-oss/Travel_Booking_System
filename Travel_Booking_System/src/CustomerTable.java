@@ -8,7 +8,7 @@
  * @author Ottofel
  */
 class CustomerTable {
-     private static class Entry {
+      private static class Entry {
         String key;
         Customer value;
         Entry next;
@@ -27,13 +27,16 @@ class CustomerTable {
         buckets = new Entry[16];
     }
 
+    private String normalize(String key) {
+        return key.trim().toLowerCase();
+    }
+
     private int indexFor(String key, int length) {
         return (key.hashCode() & 0x7fffffff) % length;
     }
 
-    
     public void put(Customer customer) {
-        String key = customer.getUserId();
+        String key = normalize(customer.getUserId());
         int index = indexFor(key, buckets.length);
 
         for (Entry e = buckets[index]; e != null; e = e.next) {
@@ -50,13 +53,13 @@ class CustomerTable {
         }
     }
 
-    
     public Customer get(String userId) {
         if (userId == null) {
             return null;
         }
-        for (Entry e = buckets[indexFor(userId, buckets.length)]; e != null; e = e.next) {
-            if (e.key.equals(userId)) {
+        String key = normalize(userId);
+        for (Entry e = buckets[indexFor(key, buckets.length)]; e != null; e = e.next) {
+            if (e.key.equals(key)) {
                 return e.value;
             }
         }
@@ -67,12 +70,15 @@ class CustomerTable {
         return get(userId) != null;
     }
 
-  
     public boolean remove(String userId) {
-        int index = indexFor(userId, buckets.length);
+        if (userId == null) {
+            return false;
+        }
+        String key = normalize(userId);
+        int index = indexFor(key, buckets.length);
         Entry prev = null;
         for (Entry e = buckets[index]; e != null; prev = e, e = e.next) {
-            if (e.key.equals(userId)) {
+            if (e.key.equals(key)) {
                 if (prev == null) {
                     buckets[index] = e.next;
                 } else {
@@ -100,4 +106,3 @@ class CustomerTable {
         }
     }
 }
-

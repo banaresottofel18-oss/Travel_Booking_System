@@ -32,7 +32,7 @@ public class Invoice {
         invoice += "Booking Type: " + type + "\n";
         invoice += "User ID: " + booking.getUserId() + "\n";
         invoice += "Description: " + booking.getDescription() + "\n";
-        invoice += "Total Price: " + booking.getTotalPrice() + "\n";
+        invoice += "Total Price: PHP " + String.format("%,.2f", booking.getTotalPrice()) + "\n";
         invoice += "Booking Date: " + booking.getBookingDate() + "\n";
         invoice += "==============================";
 

@@ -39,6 +39,12 @@ public class Booking {
                 totalPrice, description, bookingDate);
     
     }
+    public Booking(String userId, String flightId, String hotelId,
+            String packageId, double totalPrice, String description) {
+        this(0, userId, flightId, hotelId, packageId,
+                totalPrice, description, null);
+    }
+
     public Booking(String userId, String flightId,
             double totalPrice, String description) {
         

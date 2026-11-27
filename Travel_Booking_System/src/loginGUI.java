@@ -1,5 +1,3 @@
-
-
 import java.sql.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,7 +27,6 @@ public class loginGUI extends JFrame implements ActionListener {
     PreparedStatement pst = null;
     
       loginGUI(){
-        initComponents();
         
         conn = MysqlConnect.ConnectDB();
         
@@ -170,11 +167,10 @@ public class loginGUI extends JFrame implements ActionListener {
      }catch (SQLException ex) {
        JOptionPane.showMessageDialog(this, "Login failed: " + ex.getMessage(),
                     "Database error", JOptionPane.ERROR_MESSAGE);
-        }
+     }
+         }
     }
-      
-    }
-
-    private void initComponents() {
-    }         
-    }
+}
+     
+        
+   

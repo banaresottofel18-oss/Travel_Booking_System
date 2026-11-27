@@ -93,9 +93,9 @@ public class addFlightGUI extends JFrame implements ActionListener {
 
         btnback = new JButton("Back");
         btnback.setBounds(40, 40, 90, 35);
-        add(btnback);  
-        
-         Model = new DefaultTableModel(
+        add(btnback);
+
+        Model = new DefaultTableModel(
                 new String[]{"Flight ID", "From", "To", "Price", "Date", "Departs At"}, 0);
         Table = new JTable(Model);
         Scroll = new JScrollPane(Table);
@@ -105,31 +105,29 @@ public class addFlightGUI extends JFrame implements ActionListener {
         btnadd.addActionListener(this);
         btnback.addActionListener(this);
 
-        loadFlights();
-}
-     private void loadFlights() {
-        Model.setRowCount(0);
+      
         Connection conn = MysqlConnect.ConnectDB();
-        if (conn == null) {
-            return;
-        }
-        try {
-            PreparedStatement pst = conn.prepareStatement(
-                    "SELECT FlightId, Departure, Arrival, Price, `Date`, DepartureTime FROM flightsdb");
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                Model.addRow(new Object[]{
-                    rs.getString("FlightId"), rs.getString("Departure"), rs.getString("Arrival"),
-                    rs.getString("Price"), rs.getString("Date"), rs.getString("DepartureTime")
-                });
+        if (conn != null) {
+            try {
+                PreparedStatement pst = conn.prepareStatement(
+                        "SELECT FlightId, Departure, Arrival, Price, `Date`, DepartureTime FROM flightsdb");
+                ResultSet rs = pst.executeQuery();
+                while (rs.next()) {
+                    Model.addRow(new Object[]{
+                        rs.getString("FlightId"), rs.getString("Departure"), rs.getString("Arrival"),
+                        rs.getString("Price"), rs.getString("Date"), rs.getString("DepartureTime")
+                    });
+                }
+                conn.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Could not load flights: " + ex.getMessage(),
+                        "Database error", JOptionPane.ERROR_MESSAGE);
             }
-            conn.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Could not load flights: " + ex.getMessage(),
-                    "Database error", JOptionPane.ERROR_MESSAGE);
         }
     }
-     @Override
+
+
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnback) {
             new dashboardGUI(userSes).setVisible(true);
@@ -167,7 +165,7 @@ public class addFlightGUI extends JFrame implements ActionListener {
 
             LocalTime time;
             try {
-                time = LocalTime.parse(txttime.getText().trim());
+                time = LocalTime.parse(txttime.getText().trim()); 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Departure time must look like 08:30 or 14:45",
                         "Error Message", JOptionPane.ERROR_MESSAGE);
@@ -197,12 +195,12 @@ public class addFlightGUI extends JFrame implements ActionListener {
                 txtto.setText("");
                 txtprice.setText("");
                 txttime.setText("");
-                loadFlights();
+                Model.addRow(new Object[]{id, from, to, String.format("%.2f", price), date, time.toString()});
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this,
-                        "Could not add Flight ID is already used");   
+                        "Could not add the flight (is that Flight ID already used?): " + ex.getMessage(),
+                        "Database error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 }
-

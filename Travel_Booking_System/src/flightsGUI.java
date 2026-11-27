@@ -36,204 +36,207 @@ public class flightsGUI extends JFrame implements ActionListener{
 
 
 
-    flightsGUI(String userSes){
+   
+    flightsGUI(String userSes) {
         this.userSes = userSes;
-        
 
-        setTitle ("Travel Booking System");
+        setTitle("Travel Booking System");
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 1000);
-        
+
         flights = new JLabel(" Book your Flights!");
         flights.setBounds(350, 40, 300, 50);
         flights.setFont(flights.getFont().deriveFont(25.0f));
         add(flights);
-    
+
         from = new JLabel("From:");
         from.setBounds(50, 150, 50, 30);
         add(from);
-        
+
         to = new JLabel("To:");
         to.setBounds(300, 150, 40, 30);
         add(to);
-        
+
         date = new JLabel("Date:");
         date.setBounds(540, 150, 50, 30);
         add(date);
- 
-        fromBox = new JComboBox<> ();
+
+  
+        fromBox = new JComboBox<>();
         fromBox.setBounds(100, 150, 150, 30);
         add(fromBox);
 
-        toBox = new JComboBox<> ();
+        toBox = new JComboBox<>();
         toBox.setBounds(340, 150, 150, 30);
         add(toBox);
-        
-        dateBox = new JComboBox<> ( new String[]{"Jan - Feb","March - April","May - Jun","Jul - Aug","Sep - Oct","Nov - Dec"});
+
+        dateBox = new JComboBox<>(new String[]{"Jan - Feb", "March - April", "May - Jun",
+            "Jul - Aug", "Sep - Oct", "Nov - Dec"});
         dateBox.setBounds(600, 150, 150, 30);
         add(dateBox);
+
         
-        Model = new DefaultTableModel(new String []  {"Flight ID", "Departure"," Arrival","Price","Date", "Depart "},0);
+        Model = new DefaultTableModel(
+                new String[]{"Flight ID", "Departure", "Arrival", "Price", "Date", "Departs At"}, 0);
         Table = new JTable(Model);
         Scroll = new JScrollPane(Table);
-        Scroll.setBounds(50,210,860,530);
+        Scroll.setBounds(50, 210, 860, 530);
         add(Scroll);
-        
+
         btnsearch = new JButton("Search");
         btnsearch.setBounds(800, 150, 110, 30);
         add(btnsearch);
-        
+
         btnbook = new JButton("Book Flights");
         btnbook.setBounds(770, 760, 140, 30);
         add(btnbook);
-        
+
         btnback = new JButton("Back");
         btnback.setBounds(40, 40, 90, 35);
         add(btnback);
-     
+
         btnsearch.addActionListener(this);
         btnbook.addActionListener(this);
         btnback.addActionListener(this);
-        
-        loadCites();
-    }
-    
-    private void loadCites(){
-         Connection conn = MysqlConnect.ConnectDB();
-        if (conn == null) {
-            return;
-        }
-        try {
-            PreparedStatement pst = conn.prepareStatement(
-                    "SELECT Departure AS city FROM flightsdb UNION SELECT Arrival FROM flightsdb ORDER BY city");
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                fromBox.addItem(rs.getString("city"));
-                toBox.addItem(rs.getString("city"));
-            }
-            conn.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Could not load cities: " + ex.getMessage(),
-                    "Database error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    private void loadFlights() {
-        
-         if (fromBox.getSelectedItem() == null || toBox.getSelectedItem() == null) {
-            JOptionPane.showMessageDialog(this,
-                    "There are no flights yet. The admin has to add flights first.",
-                    "Error Message", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-         
-         String origin = fromBox.getSelectedItem().toString();
-         String destination = toBox.getSelectedItem().toString();
-         String period = dateBox.getSelectedItem().toString();
-         
-         if (origin.equalsIgnoreCase(destination)) {
-            JOptionPane.showMessageDialog(this, "Departure and arrival cities must be different.",
-                    "Error Message", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        Model.setRowCount(0);
-         Connection conn = MysqlConnect.ConnectDB();
-        if (conn == null) {
-            return;
-        }
-        try {
-            String sql = "SELECT FlightId, Departure, Arrival, Price, `Date`, DepartureTime "
-                    + "FROM flightsdb WHERE Departure = ? AND Arrival = ? AND `Date` = ?";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, origin);
-            pst.setString(2, destination);
-            pst.setString(3, period);
-            ResultSet rs = pst.executeQuery();
-            flightTree tree = new flightTree();
-            while (rs.next()) {
-                LocalTime time = null;
-                Time t = rs.getTime("DepartureTime");
-                if (t != null) {
-                    time = t.toLocalTime();
-                }
-                tree.add(new Flight(rs.getString("FlightId"), rs.getString("Departure"),
-                        rs.getString("Arrival"), rs.getDouble("Price"), rs.getString("Date"), time));
-            }
-            conn.close();
-            show = tree.inOrder();  
 
-            
-            for (Flight f : show) {
-                Model.addRow(new Object[]{f.getFlightId(), f.getDeparture(), f.getArrival(),
-                    String.format("%,.2f", f.getPrice()), f.getDate(), f.getDepartureTimeText()});
-            }
-            if (show.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No Available Flights!.");
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Could not load flights: " + ex.getMessage(),
-                    "Database error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    private void bookSelectedFlight() {
-        int row = Table.getSelectedRow();
-        if (row < 0 || row >= show.size()) {
-            JOptionPane.showMessageDialog(this, "Select a flight first before booking",
-                    "Error Message", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        Flight f = show.get(row);
- 
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Book flight " + f + "\nPrice: PHP " + String.format("%,.2f", f.getPrice()) + "?",
-                "Confirm booking", JOptionPane.YES_NO_OPTION);
-        if (confirm != JOptionPane.YES_OPTION) {
-            return;
-        }
- 
-       Booking booking = new Booking(userSes, f.getFlightId(), f.getPrice(),
-        "Flight " + f.getFlightId() + ": " + f.getDeparture() + " to " + f.getArrival()
-        + ", " + f.getDate() + ", departs " + f.getDepartureTimeText());
-        
+      
         Connection conn = MysqlConnect.ConnectDB();
-        if (conn == null) {
-            return;
-        }
-        try {
-            String sql = "INSERT INTO bookings (user_id, flight_id, hotel_id, package_id, total_price, description) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pst.setString(1, booking.getUserId());
-            pst.setString(2, booking.getFlightId());
-            pst.setString(3, null);
-            pst.setString(4, null);
-            pst.setDouble(5, booking.getTotalPrice());
-            pst.setString(6, booking.getDescription());
-            pst.executeUpdate();
- 
-            ResultSet keys = pst.getGeneratedKeys();
-            if (keys.next()) {
-                booking.setBookingId(keys.getInt(1));
+        if (conn != null) {
+            try {
+                PreparedStatement pst = conn.prepareStatement(
+                        "SELECT Departure AS city FROM flightsdb UNION SELECT Arrival FROM flightsdb ORDER BY city");
+                ResultSet rs = pst.executeQuery();
+                while (rs.next()) {
+                    fromBox.addItem(rs.getString("city"));
+                    toBox.addItem(rs.getString("city"));
+                }
+                conn.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Could not load cities: " + ex.getMessage(),
+                        "Database error", JOptionPane.ERROR_MESSAGE);
             }
-            conn.close();
- 
-            JOptionPane.showMessageDialog(this, "Flight booked!");
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Could not save your booking: " + ex.getMessage(),
-                    "Database error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        
-        if(e.getSource() == btnback){
+
+        if (e.getSource() == btnback) {
             new dashboardGUI(userSes).setVisible(true);
             dispose();
+
         } else if (e.getSource() == btnsearch) {
-            loadFlights();
-        }  else if (e.getSource() == btnbook) {
-            bookSelectedFlight();
+
+            if (fromBox.getSelectedItem() == null || toBox.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this,
+                        "There are no flights yet. The admin has to add flights first.",
+                        "Error Message", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String origin = fromBox.getSelectedItem().toString();
+            String destination = toBox.getSelectedItem().toString();
+            String period = dateBox.getSelectedItem().toString();
+
+            if (origin.equalsIgnoreCase(destination)) {
+                JOptionPane.showMessageDialog(this, "Departure and arrival cities must be different.",
+                        "Error Message", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Model.setRowCount(0);
+            show.clear();
+
+            Connection conn = MysqlConnect.ConnectDB();
+            if (conn == null) {
+                return;
+            }
+            try {
+                String sql = "SELECT FlightId, Departure, Arrival, Price, `Date`, DepartureTime "
+                        + "FROM flightsdb WHERE Departure = ? AND Arrival = ? AND `Date` = ?";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, origin);
+                pst.setString(2, destination);
+                pst.setString(3, period);
+                ResultSet rs = pst.executeQuery();
+
+               
+                flightTree tree = new flightTree();
+                while (rs.next()) {
+                    LocalTime time = null;
+                    Time t = rs.getTime("DepartureTime");
+                    if (t != null) {
+                        time = t.toLocalTime();
+                    }
+                    tree.add(new Flight(rs.getString("FlightId"), rs.getString("Departure"),
+                            rs.getString("Arrival"), rs.getDouble("Price"), rs.getString("Date"), time));
+                }
+                conn.close();
+
+                show = tree.inOrder();   
+
+                for (Flight f : show) {
+                    Model.addRow(new Object[]{f.getFlightId(), f.getDeparture(), f.getArrival(),
+                        String.format("%,.2f", f.getPrice()), f.getDate(), f.getDepartureTimeText()});
+                }
+                if (show.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No Available Flights!.");
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Could not load flights: " + ex.getMessage(),
+                        "Database error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } else if (e.getSource() == btnbook) {
+
+            int row = Table.getSelectedRow();
+            if (row < 0 || row >= show.size()) {
+                JOptionPane.showMessageDialog(this, "Select a flight first before booking",
+                        "Error Message", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            Flight f = show.get(row);
+
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Book flight " + f + "\nPrice: PHP " + String.format("%,.2f", f.getPrice()) + "?",
+                    "Confirm booking", JOptionPane.YES_NO_OPTION);
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            Booking booking = new Booking(userSes, f.getFlightId(), null, null, f.getPrice(),
+                    "Flight " + f.getFlightId() + ": " + f.getDeparture() + " to " + f.getArrival()
+                    + ", " + f.getDate() + ", departs " + f.getDepartureTimeText());
+
+            Connection conn = MysqlConnect.ConnectDB();
+            if (conn == null) {
+                return;
+            }
+            try {
+                String sql = "INSERT INTO bookings (user_id, flight_id, hotel_id, package_id, total_price, description) "
+                        + "VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                pst.setString(1, booking.getUserId());
+                pst.setString(2, booking.getFlightId());
+                pst.setString(3, null);
+                pst.setString(4, null);
+                pst.setDouble(5, booking.getTotalPrice());
+                pst.setString(6, booking.getDescription());
+                pst.executeUpdate();
+
+                ResultSet keys = pst.getGeneratedKeys();
+                if (keys.next()) {
+                    booking.setBookingId(keys.getInt(1));
+                }
+                conn.close();
+
+                JOptionPane.showMessageDialog(this, "Flight booked!\n\n" + new Invoice(booking).generateInvoice(),
+                        "Booking confirmed", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Could not save your booking: " + ex.getMessage(),
+                        "Database error", JOptionPane.ERROR_MESSAGE);
+            }
         }
-      }
-    
+    }
 }
